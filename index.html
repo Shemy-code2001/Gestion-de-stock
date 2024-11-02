@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopp-Store</title>
+    <style>
+        :root {
+  --primary-color: #ff5722;
+  --secondary-color: #f5f5f5;
+  --text-color: #333;
+  --border-color: #ddd;
+  --shadow: 0 2px 5px rgba(0,0,0,0.1);
+  --border-radius: 5px;
+  --transition: all 0.3s ease;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Roboto', Arial, sans-serif;
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+/* Header Styles */
+header {
+  background-color: white;
+  padding: 15px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.logo {
+  color: var(--primary-color);
+  font-size: 28px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  transition: var(--transition);
+}
+
+.logo:hover {
+  transform: scale(1.05);
+}
+
+.logo::before {
+  content: '🏪';
+  margin-right: 10px;
+}
+
+/* Search Bar Styles */
+.search-bar {
+  display: flex;
+  align-items: center;
+  background-color: var(--secondary-color);
+  border-radius: var(--border-radius);
+  padding: 5px;
+  flex-grow: 1;
+  margin: 0 30px;
+  transition: var(--transition);
+}
+
+.search-bar:focus-within {
+  box-shadow: 0 0 0 2px var(--primary-color);
+}
+
+.search-bar select,
+.search-bar input {
+  border: none;
+  background: transparent;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.search-bar select {
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.search-bar input {
+  flex-grow: 1;
+}
+
+.search-bar button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.search-bar button:hover {
+  background-color: darken(var(--primary-color), 10%);
+}
+
+.user-menu {
+  background-color: var(--secondary-color);
+  padding: 10px 15px;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.user-menu:hover {
+  background-color: darken(var(--secondary-color), 5%);
+}
+
+/* Navigation Styles */
+nav {
+  background-color: white;
+  padding: 15px 30px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+nav ul {
+  list-style-type: none;
+  display: flex;
+  justify-content: center;
+}
+
+nav ul li {
+  margin: 0 15px;
+  cursor: pointer;
+  position: relative;
+}
+
+nav ul li::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -5px;
+  left: 0;
+  background-color: var(--primary-color);
+  transition: var(--transition);
+}
+
+nav ul li:hover::after {
+  width: 100%;
+}
+
+/* Main Content Layout */
+.content {
+  display: flex;
+  padding: 30px;
+  gap: 30px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Filter Styles */
+.filters {
+  background-color: white;
+  padding: 20px;
+  border-radius: var(--border-radius);
+  width: 280px;
+  box-shadow: var(--shadow);
+}
+
+.filter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.clear-all {
+  color: var(--primary-color);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.clear-all:hover {
+  text-decoration: underline;
+}
+
+.applied-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.filter-tag {
+  background-color: var(--secondary-color);
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  transition: var(--transition);
+}
+
+.filter-tag:hover {
+  background-color: darken(var(--secondary-color), 5%);
+}
+
+.filter-tag::after {
+  content: '✕';
+  margin-left: 5px;
+  color: #999;
+}
+
+.filter-section h4 {
+  margin-top: 20px;
+  margin-bottom: 15px;
+  font-weight: 500;
+}
+
+.filter-section ul {
+  list-style-type: none;
+}
+
+.filter-section li {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+}
+
+/* Custom Checkbox Styles */
+.custom-checkbox {
+  position: relative;
+  padding-left: 30px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.custom-checkbox input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background-color: #eee;
+  border-radius: 3px;
+}
+
+.custom-checkbox:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+.custom-checkbox input:checked ~ .checkmark {
+  background-color: var(--primary-color);
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.custom-checkbox input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.custom-checkbox .checkmark:after {
+  left: 7px;
+  top: 3px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+/* Color Options Styles */
+.color-options {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.color-option {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.color-option:hover {
+  transform: scale(1.1);
+}
+
+.color-option.selected {
+  border-color: var(--primary-color);
+}
+
+/* Main Content Styles */
+.main-content {
+  flex-grow: 1;
+}
+
+.product-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  background-color: white;
+  padding: 15px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+}
+
+.view-options button {
+  background-color: var(--secondary-color);
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+}
+
+.view-options button.active {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.sort-options select {
+  padding: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  margin-left: 15px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.sort-options select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+/* Product Grid Styles */
+.products {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 30px;
+}
+
+.product-card {
+  background-color: white;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.product-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  transition: var(--transition);
+}
+
+.product-card:hover img {
+  transform: scale(1.05);
+}
+
+.product-info {
+  padding: 20px;
+}
+
+.product-title {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.product-rating {
+  color: #ffc107;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.product-price {
+  font-weight: bold;
+  color: var(--primary-color);
+  font-size: 18px;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .content {
+    flex-direction: column;
+  }
+  
+  .filters {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .search-bar {
+    margin: 15px 0;
+  }
+  
+  nav ul {
+    flex-wrap: wrap;
+  }
+  
+  .products {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.product-card {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Scroll to top button */
+.scroll-to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: var(--primary-color);
+  color: white;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: var(--transition);
+}
+
+.scroll-to-top.visible {
+  opacity: 1;
+}
+
+.scroll-to-top:hover {
+  transform: translateY(-3px);
+}
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Shopp-Store</div>
+        <div class="search-bar">
+            <select>
+                <option>CATEGORIE</option>
+            </select>
+            <input type="text" placeholder="Search...">
+            <button>Search</button>
+        </div>
+        <div class="user-menu">MyPage ▼</div>
+    </header>
+
+    <nav>
+        <ul>
+            <li>Mouse gaming</li>
+            <li>Keypad</li>
+            <li>Ransel keyboard</li>
+            <li>Computer</li>
+            <li>Laptop</li>
+        </ul>
+    </nav>
+
+    <div class="content">
+        <div class="filters">
+            <div class="filter-header">
+                <h3>Filter</h3>
+                <button class="clear-all">Clear All</button>
+            </div>
+            <div class="applied-filters">
+                <span class="filter-tag">City</span>
+                <span class="filter-tag">Condition</span>
+                <span class="filter-tag">Color</span>
+            </div>
+            <div class="filter-section">
+                <h4>CITY</h4>
+                <ul>
+                    <li><input type="checkbox"> Casablanca</li>
+                    <li><input type="checkbox"> Marrakech</li>
+                    <li><input type="checkbox"> Tanger</li>
+                    <li><input type="checkbox" checked> Tetouan</li>
+                    <li><input type="checkbox"> Fez</li>
+                </ul>
+            </div>
+            <div class="filter-section">
+                <h4>CONDITION</h4>
+                <ul>
+                    <li><input type="checkbox"> New</li>
+                    <li><input type="checkbox" checked> Second</li>
+                    <li><input type="checkbox"> Refurbish</li>
+                </ul>
+            </div>
+            <div class="filter-section">
+                <h4>COLOR</h4>
+                <div class="color-options">
+                    <div class="color-option" style="background-color: red;"></div>
+                    <div class="color-option" style="background-color: blue;"></div>
+                    <div class="color-option" style="background-color: black;"></div>
+                    <div class="color-option" style="background-color: white; border: 1px solid #ddd;"></div>
+                    <div class="color-option" style="background-color: orange;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="main-content">
+            <div class="product-controls">
+                <div class="view-options">
+                    <button class="active">Product</button>
+                    <button>Store</button>
+                </div>
+                <div class="sort-options">
+                    <select>
+                        <option>Price range: 300.000 - 5.200.000</option>
+                    </select>
+                    <select>
+                        <option>Sort by Reviews</option>
+                    </select>
+                </div>
+            </div>
+            <div class="products">
+                <div class="product-card">
+                    <img src="8159b2a7039508f700057738d0f343a4.jpg" alt="Pantagon gENnator 6.5kW">
+                    <div class="product-info">
+                        <h3 class="product-title">Pantagon gENnator 6.5kW Silencer Gasoline</h3>
+                        <div class="product-rating">⭐⭐⭐⭐⭐ 223 Reviews</div>
+                        <div class="product-price">99,999 DH</div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="78bfa893270a0b531705b1c56f25674d.jpg" alt="MacBook Pro">
+                    <div class="product-info">
+                        <h3 class="product-title">MacBook Pro 14-inch | M2 Pro chip | 512GB SSD | 16GB</h3>
+                        <div class="product-rating">⭐⭐⭐⭐⭐ 1253 Reviews</div>
+                        <div class="product-price">9'99,798 DH</div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="398c8169941bf0b239641ad6822ff93d.jpg" alt="HyperX Cloud Alpha Wireless">
+                    <div class="product-info">
+                        <h3 class="product-title">HyperX Cloud Alpha Wireless 300-hour battery life</h3>
+                        <div class="product-rating">⭐⭐⭐⭐⭐ 876 Reviews</div>
+                        <div class="product-price">159.99 DH</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript for additional functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Function to toggle dropdowns
+            function toggleDropdown(dropdownId) {
+                const dropdown = document.getElementById(dropdownId);
+                dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+            }
+
+            // Add event listeners for dropdowns
+            document.querySelector('.user-menu').addEventListener('click', () => toggleDropdown('userDropdown'));
+            
+            // Function to handle filter changes
+            function applyFilters() {
+                // This would typically involve fetching new data or filtering existing data
+                console.log('Filters applied');
+            }
+
+            // Add event listeners for filter changes
+            document.querySelectorAll('.filters input[type="checkbox"]').forEach(checkbox => {
+                checkbox.addEventListener('change', applyFilters);
+            });
+
+            document.querySelectorAll('.filters button').forEach(button => {
+                button.addEventListener('click', applyFilters);
+            });
+
+            // Function to handle search
+            function performSearch() {
+                const searchTerm = document.querySelector('.search-bar input').value;
+                console.log('Searching for:', searchTerm);
+                // Implement actual search functionality here
+            }
+
+            // Add event listener for search button
+            document.querySelector('.search-bar button').addEventListener('click', performSearch);
+
+            // Function to handle product sorting
+            function sortProducts(criteria) {
+                console.log('Sorting products by:', criteria);
+                // Implement actual sorting functionality here
+            }
+
+            // Add event listener for sort dropdown
+            document.querySelector('select[name="sort"]').addEventListener('change', (e) => sortProducts(e.target.value));
+        });
+    </script>
+</body>
+</html>
